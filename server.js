@@ -1,31 +1,38 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const Riddle = require('./models/riddleModel'); // Adjust the path as needed
+const express = require('express')
+const mongoose = require('mongoose')
+const Riddle = require('./models/riddleModel')
+const app = express()
 
-const app = express();
-const PORT = process.env.PORT || 5001;
+//middleware
+app.use(express.json())
 
-// MongoDB Connection
-mongoose.connect('mongodb+srv://adalatjurat:test123@cluster0.pisi1cy.mongodb.net/', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+//routes
 
-// Middleware
-app.use(cors());
+app.get('/', (req, res) =>{
+    res.send('Hello Uyghur-Riddle-Website')
+})
 
-// API endpoint to get all riddles
-app.get('/api/riddles', async (req, res) => {
-  try {
-    const riddles = await Riddle.find();
-    res.json(riddles);
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
+app.get('/blog', (req, res) => {
+    res.send('Hello Blog, My name is Adalat')
+})
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// get all the data from database
+app.get('/riddles', async(req, res) => {
+    try{
+        const riddles = await Riddle.find({});
+        res.status(200).json(riddles);
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+ })
+
+mongoose
+.connect('mongodb+srv://adalatjurat:test123@cluster0.pisi1cy.mongodb.net/uyghur?retryWrites=true&w=majority')
+.then(() => {
+    console.log('connected to MongoDB')
+    app.listen(3000, ()=> {
+        console.log('Node api app is running on port 3000')
+    });
+}).catch(() =>{
+    console.log(error)
+})

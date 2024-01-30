@@ -1,12 +1,29 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-const riddleSchema = new mongoose.Schema({
-  category: String,
-  riddle: String,
-  answer: String,
-  explanation: String,
-});
+const riddleSchema = mongoose.Schema(
+    {
+        category: {
+            type: String,
+            required: [true, "Please Enter A category for the riddle"]
+        },
+        riddle: {
+            type: String,
+            required: true,
+        },
+        answer: {
+            type: String,
+            required: true,
+        },
+        explanation: {
+            type: String,
+            required: true,
+        }
+    },
+    {
+        timestamps: true
+    }
+)
 
-const Riddle = mongoose.model('Riddle', riddleSchema);
+const Riddle = mongoose.model('riddle', riddleSchema);
 
 module.exports = Riddle;
